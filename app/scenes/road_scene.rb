@@ -1,10 +1,15 @@
 class RoadScene < SKScene
+  CAR = 1
+  FROGS = 2
 
   def didMoveToView(view)
     super
     @view = view
+
     self.backgroundColor = SKColor.whiteColor
     self.scaleMode = SKSceneScaleModeFill
+    self.physicsWorld.gravity = CGVectorMake(0,0);
+    self.physicsWorld.contactDelegate = self;
 
     init_swipe_gestures
 
@@ -25,6 +30,21 @@ class RoadScene < SKScene
     self.moveBackground
   end
 
+
+  def didBeginContact(contact)
+    first, second = if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask
+      [contact.bodyA, contact.bodyB]
+    else
+      [contact.bodyB, contact.bodyA]
+    end
+
+    if (first.categoryBitMask & CAR) != 0
+      car, frog = first.node, second.node
+
+      car.runAction(SKAction.removeFromParent)
+      frog.runAction(SKAction.removeFromParent)
+    end
+  end
 
   # create elements
   def init_swipe_gestures
