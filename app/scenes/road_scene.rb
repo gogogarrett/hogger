@@ -56,17 +56,13 @@ class RoadScene < SKScene
   end
 
   def add_car
-    @car = SKSpriteNode.spriteNodeWithImageNamed("car.png")
-    @car.size = CGSizeMake(35, 35)
-    @car.name = "car"
-    @car.position = CGPointMake((size.width / 2) + 30, 90)
-
+    @car = Car.initWithScene(self)
     addChild @car
   end
 
   def add_frog
     @frog = Frog.initWithScene(self)
-    @frog.runAction(SKAction.repeatActionForever(hopping_sequence))
+    @frog.runAction SKAction.repeatActionForever(hopping_sequence)
 
     addChild @frog
   end
@@ -80,7 +76,7 @@ class RoadScene < SKScene
   # actions
   def move_frog
     @position = @frog.position.x
-    @frog.runAction(SKAction.moveToX(@position + 90, duration: 0.5))
+    @frog.runAction SKAction.moveToX(@position + 90, duration: 0.5)
   end
 
   def move_left(recognizer)
