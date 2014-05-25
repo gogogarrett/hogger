@@ -5,6 +5,7 @@ class RoadScene < SKScene
   def didMoveToView(view)
     super
     @view = view
+    @score = 0
 
     self.backgroundColor = SKColor.whiteColor
     self.scaleMode = SKSceneScaleModeFill
@@ -15,11 +16,16 @@ class RoadScene < SKScene
 
     add_backgrounds
     add_car
+    add_highscore
 
     add_frog # needs to be random
   end
 
   def update(currentTime)
+
+    @score += 1
+    update_highscore
+
     @delta = if @lastUpdateTime
       currentTime - @lastUpdateTime
     else
@@ -41,9 +47,16 @@ class RoadScene < SKScene
     if (first.categoryBitMask & CAR) != 0
       car, frog = first.node, second.node
 
-      car.runAction(SKAction.removeFromParent)
+
+      @score += 10
+      update_highscore
+      # car.runAction(SKAction.removeFromParent)
       frog.runAction(SKAction.removeFromParent)
     end
+  end
+
+  def update_highscore
+    @highscore_label.text = "#{@score}"
   end
 
   # create elements
@@ -73,6 +86,16 @@ class RoadScene < SKScene
 
       addChild background
     end
+  end
+
+  def add_highscore
+    @highscore_label = SKLabelNode.labelNodeWithFontNamed("Chalkduster")
+    @highscore_label.text = "#{@score}"
+    @highscore_label.fontSize = 10
+    @highscore_label.fontColor = SKColor.blackColor
+    @highscore_label.position = CGPointMake((scene.size.width / 2) + 60, scene.size.height / 2)
+
+    addChild @highscore_label
   end
 
   def add_car

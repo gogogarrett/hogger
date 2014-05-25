@@ -4,9 +4,9 @@ end
 class AppDelegate
 
   def application(application, didFinishLaunchingWithOptions:launchOptions)
-    controller = GameViewController.alloc.init
+    game_controller = GameViewController.alloc.init
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
-    @window.rootViewController = controller
+    @window.rootViewController = game_controller
     @window.makeKeyAndVisible
 
     true
